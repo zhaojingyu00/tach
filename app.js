@@ -51,7 +51,7 @@ $(function () {
             navs[i].onclick = function () {
                 i = i + 1;
                 list();
-                animate(slider, { left: -1200 * i });
+                tach(slider, { left: -1200 * i });
             }
         })(i);
     }
@@ -64,7 +64,7 @@ $(function () {
         move = true;
         i--;
         list();
-        animate(slider, { left: -1200 * i }, function () {
+        tach(slider, { left: -1200 * i }, function () {
             if (i == 0) {
                 slider.style.left = '-6000px';
                 i = 5;
@@ -82,7 +82,7 @@ $(function () {
         move = true;
         i++;
         list();
-        animate(slider, { left: -1200 * i }, function () {
+        tach(slider, { left: -1200 * i }, function () {
             if (i == 6) {
                 slider.style.left = '-1200px';
                 i = 1;
@@ -119,7 +119,7 @@ $(function () {
     
 
 
-    function animate(obj, json, callback) {
+    function tach(obj, json, callback) {
         clearInterval(obj.timer);
         obj.timer = setInterval(function () {
             var isStop = true;
@@ -132,14 +132,13 @@ $(function () {
                 }
                 var speed = (json[attr] - n) / 8;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
-                var resu = n + speed;
                 if (attr == 'opacity') {
-                    obj.style[attr] = resu / 100;
+                    obj.style[attr] = (n + speed) / 100;
                 } 
                 else {
-                    obj.style[attr] = resu + 'px';
+                    obj.style[attr] = (n + speed) + 'px';
                 }
-                if (json[attr] !== resu) {
+                if (json[attr] !== n + speed) {
                     isStop = false;
                 }
             }
