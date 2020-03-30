@@ -22,84 +22,93 @@ $(function () {
         )
     );
     var box = document.getElementById('box');
-    var oNavlist = document.getElementById('navs').children;
+    var navs = document.getElementById('navs').children;
     var slider = document.getElementById('slider');
     var left = document.getElementById('left');
     var right = document.getElementById('right');
     var span = document.getElementsByTagName('span');
-    var index = 1;
-    var isMoving = false;
-    var timer = setInterval(next, 3000);
-    //鼠标滑入改变左右索引的透明度
-    box.onmouseover = function () {
-        span[0].style.opacity = 0.5;
-        span[1].style.opacity = 0.5;
-        clearInterval(timer)
+    var i = 1;
+    var move = false;
+
+     left.onclick = last;
+     right.onclick = next;
+
+
+    function list() {
+        for (var i = 0; i < navs.length; i++) {
+            navs[i].className = "";
+        }
+        if (i > 5) {
+            navs[0].className = "active";
+        } else if (i <= 0) {
+            navs[4].className = "active";
+        } else {
+            navs[i - 1].className = "active";
+        }
     }
-    box.onmouseout = function () {
-        span[0].style.opacity = 0;
-        span[1].style.opacity = 0;
-        timer = setInterval(next, 3000);
-    }
-    //左右索引添加事件
-    left.onclick = prev;
-    right.onclick = next;
-    //索引序号
-    for (var i = 0; i < oNavlist.length; i++) {
+    for (var i = 0; i < navs.length; i++) {
         (function (i) {
-            oNavlist[i].onclick = function () {
-                index = i + 1;
-                navmove();
-                animate(slider, { left: -1200 * index });
+            navs[i].onclick = function () {
+                i = i + 1;
+                list();
+                animate(slider, { left: -1200 * i });
             }
         })(i);
     }
-    //上一张
-    function prev() {
-        if (isMoving) {
+    
+
+    function last() {
+        if (move) {
             return;
         }
-        isMoving = true;
-        index--;
-        navmove();
-        animate(slider, { left: -1200 * index }, function () {
-            if (index == 0) {
+        move = true;
+        i--;
+        list();
+        animate(slider, { left: -1200 * i }, function () {
+            if (i == 0) {
                 slider.style.left = '-6000px';
-                index = 5;
+                i = 5;
             }
-            isMoving = false;
+            move = false;
         });
     }
-    //下一张
+    
+
+
     function next() {
-        if (isMoving) {
+        if (move) {
             return;
         }
-        isMoving = true;
-        index++;
-        navmove();
-        animate(slider, { left: -1200 * index }, function () {
-            if (index == 6) {
+        move = true;
+        i++;
+        list();
+        animate(slider, { left: -1200 * i }, function () {
+            if (i == 6) {
                 slider.style.left = '-1200px';
-                index = 1;
+                i = 1;
             }
-            isMoving = false;
+            move = false;
         });
     }
-    //对应图片的索引序号
-    function navmove() {
-        for (var i = 0; i < oNavlist.length; i++) {
-            oNavlist[i].className = "";
-        }
-        if (index > 5) {
-            oNavlist[0].className = "active";
-        } else if (index <= 0) {
-            oNavlist[4].className = "active";
-        } else {
-            oNavlist[index - 1].className = "active";
-        }
+
+    
+    var timer = setInterval(next, 2000);
+    
+
+
+    box.onmouseover = function () {
+        left.style.opacity = 0.3;
+        right.style.opacity = 0.3;
+        clearInterval(timer)
     }
-    //获取当前标签的css属性
+    box.onmouseout = function () {
+        left.style.opacity = 0;
+        right.style.opacity = 0;
+        timer();
+    }
+   
+     
+    
     function getStyle(obj, attr){
         if(obj.currentStyle){
             return obj.currentStyle[attr];
@@ -107,27 +116,30 @@ $(function () {
             return getComputedStyle(obj, null)[attr];
         }
     }
-    //轮播
+    
+
+
     function animate(obj, json, callback) {
         clearInterval(obj.timer);
         obj.timer = setInterval(function () {
             var isStop = true;
             for (var attr in json) {
-                var now = 0;
+                var n = 0;
                 if (attr == 'opacity') {
-                    now = parseInt(getStyle(obj, attr) * 100);
+                    n = parseInt(getStyle(obj, attr) * 100);
                 } else {
-                    now = parseInt(getStyle(obj, attr));
+                    n = parseInt(getStyle(obj, attr));
                 }
-                var speed = (json[attr] - now) / 8;
+                var speed = (json[attr] - n) / 8;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
-                var cur = now + speed;
+                var resu = n + speed;
                 if (attr == 'opacity') {
-                    obj.style[attr] = cur / 100;
-                } else {
-                    obj.style[attr] = cur + 'px';
+                    obj.style[attr] = resu / 100;
+                } 
+                else {
+                    obj.style[attr] = resu + 'px';
                 }
-                if (json[attr] !== cur) {
+                if (json[attr] !== resu) {
                     isStop = false;
                 }
             }
@@ -135,6 +147,6 @@ $(function () {
                 clearInterval(obj.timer);
                 callback && callback();
             }
-        }, 30)
+        }, 20)
     }
 })
