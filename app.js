@@ -125,19 +125,22 @@ $(function () {
             var isStop = true;
             for (var attr in json) {
                 var n = 0;
-                if (attr == 'opacity') {
-                    n = parseInt(getStyle(obj, attr) * 100);
-                } else {
-                    n = parseInt(getStyle(obj, attr));
-                }
                 var speed = (json[attr] - n) / 8;
                 speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
                 if (attr == 'opacity') {
+                    n = parseInt(getStyle(obj, attr) * 100);
                     obj.style[attr] = (n + speed) / 100;
-                } 
-                else {
+                } else {
+                    n = parseInt(getStyle(obj, attr));
                     obj.style[attr] = (n + speed) + 'px';
                 }
+                
+                // if (attr == 'opacity') {
+                //     obj.style[attr] = (n + speed) / 100;
+                // } 
+                // else {
+                //     obj.style[attr] = (n + speed) + 'px';
+                // }
                 if (json[attr] !== n + speed) {
                     isStop = false;
                 }
