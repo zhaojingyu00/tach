@@ -125,8 +125,7 @@ $(function () {
             var isStop = true;
             for (var attr in json) {
                 var n = 0;
-                var speed = (json[attr] - n) / 8;
-                speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
+                
                 if (attr == 'opacity') {
                     n = parseInt(getStyle(obj, attr) * 100);
                     // obj.style[attr] = (n + speed) / 100;
@@ -134,7 +133,8 @@ $(function () {
                     n = parseInt(getStyle(obj, attr));
                     // obj.style[attr] = (n + speed) + 'px';
                 }
-                
+                var speed = (json[attr] - n) / 8;
+                speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed);
                 if (attr == 'opacity') {
                     obj.style[attr] = (n + speed) / 100;
                 } 
