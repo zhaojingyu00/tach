@@ -26,17 +26,27 @@ $(function () {
     var slider = document.getElementById('slider');
     var left = document.getElementById('left');
     var right = document.getElementById('right');
-    var span = document.getElementsByTagName('span');
     var i = 1;
     var move = false;
 
-     left.onclick = last;
-     right.onclick = next;
+     
+     box.onmouseover = function () {
+        left.style.opacity = 0.3;
+        right.style.opacity = 0.3;
+        clearInterval(timer)
+    }
+    box.onmouseout = function () {
+        left.style.opacity = 0;
+        right.style.opacity = 0;
+        timer();
+    }
+    left.onclick = last;
+    right.onclick = next;
 
 
     function list() {
         for (var i = 0; i < navs.length; i++) {
-            navs[i].className = "";
+            navs[i].className = '';
         }
         if (i > 5) {
             navs[0].className = "active";
@@ -49,7 +59,7 @@ $(function () {
     for (var i = 0; i < navs.length; i++) {
         (function (i) {
             navs[i].onclick = function () {
-                i = i + 1;
+                i++;
                 list();
                 tach(slider, { left: -1200 * i });
             }
@@ -96,16 +106,7 @@ $(function () {
     
 
 
-    box.onmouseover = function () {
-        left.style.opacity = 0.3;
-        right.style.opacity = 0.3;
-        clearInterval(timer)
-    }
-    box.onmouseout = function () {
-        left.style.opacity = 0;
-        right.style.opacity = 0;
-        timer();
-    }
+   
    
      
     
@@ -125,7 +126,6 @@ $(function () {
             var isStop = true;
             for (var attr in json) {
                 var n = 0;
-                
                 if (attr == 'opacity') {
                     n = parseInt(getStyle(obj, attr) * 100);
                     // obj.style[attr] = (n + speed) / 100;
@@ -149,6 +149,6 @@ $(function () {
                 clearInterval(obj.timer);
                 callback && callback();
             }
-        }, 20)
+        }, 50)
     }
 })
